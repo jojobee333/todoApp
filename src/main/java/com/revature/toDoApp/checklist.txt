@@ -1,1 +1,14 @@
  [X]   --  Created Entity Classes
+ [ ]   --  Set up SQL Server Database
+
+
+As a user, I can create a new To-Do
+As a user, I can view all To-Dos
+As a user, I can view a singular To-Do by its ID (HINT: Use Path Params to select a To-Do by its ID)
+As a user, I can update a To-Do (Change the title, mark it complete/incomplete)
+As a user, I can delete a To-Do by its ID (HINT: Use Path Params to select a To-Do by its ID)
+As a user, I can create an account to hold my To-Dos
+As a user, I can login to my account (which is stored in the database)
+As a user, I can view the To-Dos associated with my account
+As a user, I can filter To-Dos to only show completed or incompleted ones. (HINT: This should use Query Params on a previously created handler for viewing To-Dos)
+As a user, I can filter my To-Dos by topics (HINT: This should use Query Params on a previously created handler for viewing To-Dos and would require an additional field on the ToDo Class
