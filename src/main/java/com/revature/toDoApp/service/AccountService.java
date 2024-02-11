@@ -24,29 +24,47 @@ public class AccountService {
     @Autowired
     private AccountValidator accountValidator;
 
-    public Optional<Account> findByName(String name) {
-        return Optional.ofNullable(accountRepository.findByName(name))
-                .orElseThrow(() -> new AccountNotFoundException("Account Not Found."));
-    }
 
-
-    public Optional<Account> createAccount(Account account){
-        // Validate data in Account Object is valid
+    private void validateAccount(Account account){
         Errors errors = new BeanPropertyBindingResult(account, "account");
         accountValidator.validate(account, errors);
         if(errors.hasErrors()){
             throw new InvalidAccountException("Account is Invalid.", errors);
         }
-        // Does account exist? If so, throw an error.
-        findByName(account.getName()).ifPresent(a -> {
-            throw new InvalidAccountException("An account already exists with that username.");
-        });
-        return Optional.of(accountRepository.save(account));
 
     }
 
-    public Optional<List<Account>> getAllAccounts(){
-        return Optional.of(accountRepository.findAll());
+    public Account getAccountByName(String name) {
+        return accountRepository.findByName(name)
+                .orElseThrow(() -> new AccountNotFoundException("Account Not Found."));
+    }
+
+
+    public Account createAccount(Account account){
+        // Validate data in Account Object is valid
+       validateAccount(account);
+        // Check if account with the same name already exists
+        accountRepository.findByName(account.getName()).ifPresent(a -> {
+            throw new InvalidAccountException("An account already exists with that username.");
+        });
+        // Save and return the new account
+        return accountRepository.save(account);
+
+    }
+
+
+    public Boolean deleteAccount(Integer account_id){
+        return accountRepository.findById(account_id)
+                .map(account -> {
+                    accountRepository.deleteById(account_id);
+                    return true;
+                })
+                .orElse(false);
+
+    }
+
+    public List<Account> getAllAccounts(){
+        return accountRepository.findAll();
     }
 
 

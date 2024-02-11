@@ -1,6 +1,8 @@
 package com.revature.toDoApp.controller;
+import com.revature.toDoApp.exception.AccountNotFoundException;
 import com.revature.toDoApp.exception.InvalidAccountException;
 import com.revature.toDoApp.exception.InvalidTodoException;
+import com.revature.toDoApp.exception.TodoNotFoundException;
 import com.revature.toDoApp.model.Account;
 import com.revature.toDoApp.model.Todo;
 import com.revature.toDoApp.service.AccountService;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,8 +32,9 @@ public class TodoAppController {
 
 
     @Autowired
-    public TodoAppController(TodoService todoService) {
+    public TodoAppController(TodoService todoService, AccountService accountService) {
         this.todoService = todoService;
+        this.accountService = accountService;
 
     }
 
@@ -38,64 +43,71 @@ public class TodoAppController {
     // TODO Handler for creating new todo
     @PostMapping(value = "/todo")
     public ResponseEntity<Todo> registerTodo(@RequestBody Todo todo) {
-        Optional<Todo> response = todoService.createTodo(todo);
-        if (response.isEmpty()) {
-            throw new InvalidTodoException("Error Creating Todo");
+        Todo response = todoService.createTodo(todo);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
-        }
-        return new ResponseEntity<>(response.get(), HttpStatus.OK);
 
+    @GetMapping(value = "/todo/{todo_id}")
+    public ResponseEntity<Todo> getTodo(@PathVariable Integer todo_id) {
+        Todo response = todoService.getTodoById(todo_id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(value = "/todo")
     public ResponseEntity<?> getAllTodos() {
-        Optional<List<Todo>> response = todoService.getAllTodos();
-        if (response.isEmpty()) {
-            return new ResponseEntity<>("No entries found", HttpStatus.OK);
-        }
-        return new ResponseEntity<>(response.get(), HttpStatus.OK);
+        List<Todo> response = todoService.getAllTodos();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PatchMapping(value = "/todo")
-    public ResponseEntity<Todo> updateTodo(@RequestBody Todo todo) {
+    @PatchMapping(value = "/todo/{todo_id}")
+    public ResponseEntity<Todo> updateTodo(@PathVariable("todo_id") int todo_id, @RequestBody Todo todo) {
+        todo.setTodo_id(todo_id);
         Todo response = todoService.updateTodo(todo);
-        return new ResponseEntity<Todo>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
 
     @GetMapping(value = "/account/{account_name}/todo")
     public ResponseEntity<?> getAllTodosByAccount(@PathVariable String account_name) {
-        Optional<List<Todo>> response = todoService.getAllTodosByAccount(account_name);
-        if (response.isEmpty()) {
-            return new ResponseEntity<>("No entries found", HttpStatus.OK);
-        }
-        return new ResponseEntity<>(response.get(), HttpStatus.OK);
+        List<Todo> response = todoService.getAllTodosByAccount(account_name);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
 
     @GetMapping(value = "/account")
     public ResponseEntity<?> getAllAccounts() {
-        Optional<List<Account>> response = accountService.getAllAccounts();
-        if (response.isEmpty()) {
-            return new ResponseEntity<>("No entries found", HttpStatus.OK);
+        List<Account> response = accountService.getAllAccounts();
+        return new ResponseEntity<>(response, HttpStatus.OK);
         }
-        return new ResponseEntity<>(response.get(), HttpStatus.OK);
-    }
+
 
     @PostMapping(value = "/account")
     public ResponseEntity<Account> registerAccount(@RequestBody Account account) {
-        Optional<Account> response = accountService.createAccount(account);
-        if (response.isEmpty()) {
-            throw new InvalidAccountException("Error Creating Account");
-        }
-        return new ResponseEntity<>(response.get(), HttpStatus.OK);
+        Account response = accountService.createAccount(account);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
 
+    @DeleteMapping(value="/account/{account_id}")
+    public ResponseEntity<?> deleteAccount(@PathVariable Integer account_id) {
+        boolean isDeleted = accountService.deleteAccount(account_id);
+        if (!isDeleted) {
+            throw new AccountNotFoundException("Account with name: " + account_id + " was not found. Deletion Not Completed.");
+        }
+        return new ResponseEntity<>("{\"message\":\"Account Successfully Deleted\"}", HttpStatus.OK);
+    }
 
-    // TODO Handler for deleting a todo
 
-    // TODO Handler for updating a todo
+    @DeleteMapping(value="/todo/{todo_id}")
+    public ResponseEntity<?> deleteTodo(@PathVariable Integer todo_id) {
+        boolean isDeleted = todoService.deleteTodo(todo_id);
+        if (!isDeleted) {
+            throw new TodoNotFoundException("Todo with id: " + todo_id + " was not found. Deletion Not Completed.");
+        }
+        return new ResponseEntity<>("{\"message\":\"Todo Successfully Deleted\"}", HttpStatus.OK);
+    }
 
 }

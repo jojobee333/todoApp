@@ -26,16 +26,16 @@ public class Todo {
     }
 
 
-    public Todo(String text, Boolean completed, String accountName){
+    public Todo(String text, Boolean completed, String account_name){
         this.text = text;
         this.completed = completed;
-        this.account_name = accountName;
+        this.account_name = account_name;
     }
-    public Todo(String text, Boolean completed, int todoId, String accountName){
-        this.todo_id = todoId;
+    public Todo(String text, Boolean completed, int todo_id, String account_name){
+        this.todo_id = todo_id;
         this.text = text;
         this.completed = completed;
-        this.account_name = accountName;
+        this.account_name = account_name;
     }
 
     public int getTodo_id() {

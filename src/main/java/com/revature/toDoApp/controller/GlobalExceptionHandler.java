@@ -2,8 +2,10 @@ package com.revature.toDoApp.controller;
 
 
 import com.revature.toDoApp.ErrorResponse;
+import com.revature.toDoApp.exception.AccountNotFoundException;
 import com.revature.toDoApp.exception.InvalidAccountException;
 import com.revature.toDoApp.exception.InvalidTodoException;
+import com.revature.toDoApp.exception.TodoNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -25,6 +27,28 @@ public class GlobalExceptionHandler {
                 );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(TodoNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTodoNotFoundException(TodoNotFoundException e, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                e.getMessage(),
+                request.getDescription(false)
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+
+    @ExceptionHandler(AccountNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAccountNotFoundException(AccountNotFoundException e, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                e.getMessage(),
+                request.getDescription(false)
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
 
     @ExceptionHandler(InvalidAccountException.class)
     public ResponseEntity<ErrorResponse> handleInvalidAccountException(InvalidAccountException e, WebRequest request){

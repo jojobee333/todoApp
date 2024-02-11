@@ -21,8 +21,12 @@ public class AccountValidator implements Validator {
         Account account = (Account) target;
 
         if(account.getName() == null || account.getName().isEmpty()) {
-            errors.rejectValue("username", "username.empty", "Username Cannot Be Empty");
+            errors.rejectValue("accountname", "accountname.empty", "Account Name Cannot Be Empty");
         }
+        if(account.getPassword() == null || account.getPassword().isEmpty()) {
+            errors.rejectValue("password", "password.empty", "Password Cannot Be Empty");
+        }
+
         if(account.getPassword().length() < 5) {
             errors.rejectValue("password", "password.too.short", "Password is Too Short");
         }
