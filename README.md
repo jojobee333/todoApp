@@ -1,8 +1,8 @@
-Documentation for TodoAppController in Spring Application
+#TodoApplication
 
-The TodoAppController class is a part of the com.revature.toDoApp.controller package in a Spring application. This controller provides RESTful endpoints for managing Todo and Account entities. Below is the detailed documentation of its API endpoints.
-Endpoints
-Todo Management
+This Application provides Restful endpoints for managing Todo and Account entities. It is built with Spring and is supported by an H2 database. Below is the documentation for each of the endpoints.
+##Endpoints
+##Todo Management
 
     Create a New Todo
         URL: /todo
