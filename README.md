@@ -1,8 +1,8 @@
-TodoApplication Documentation
+# TodoApplication Documentation
 
 This TodoApplication provides RESTful endpoints for managing Todo and Account entities. It is built using the Spring Framework and utilizes an H2 database for data persistence. The following documentation outlines the available API endpoints and their usage.
-Endpoints
-Todo Management
+## Endpoints
+### Todo Management
 Create a New Todo
 
     URL: /todo
