@@ -1,6 +1,4 @@
 package com.revature.toDoApp.controller;
-
-
 import com.revature.toDoApp.ErrorResponse;
 import com.revature.toDoApp.exception.AccountNotFoundException;
 import com.revature.toDoApp.exception.InvalidAccountException;

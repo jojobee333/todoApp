@@ -16,11 +16,6 @@ import java.util.List;
 
 @Service
 public class TodoService {
-
-
-    // validate account exists prior to submitting todo
-
-
     @Autowired
     private TodoRepository todoRepository;
 
@@ -64,6 +59,12 @@ public class TodoService {
     }
 
 
+    public List<Todo> getAllTodosByCompleted(boolean completed){
+        return todoRepository.findByCompleted(completed)
+                .orElseThrow(()-> new TodoNotFoundException("Todo with Completion Status: " + completed + " was not found"));
+    }
+
+
     public Todo getTodoById(int todo_id){
         return todoRepository.findById(todo_id)
                 .orElseThrow(() -> new TodoNotFoundException("Todo Not Found"));
@@ -91,7 +92,9 @@ public class TodoService {
             existingTodo.setCompleted(todoUpdate.isCompleted());
         }
         if (todoUpdate.getAccount_name() != null) {
-            existingTodo.setAccount_name(todoUpdate.getAccount_name());
+            accountRepository.findByName(existingTodo.getAccount_name())
+                    .ifPresent(account -> existingTodo.setAccount_name(todoUpdate.getAccount_name()));
+
         }
 
         return todoRepository.save(existingTodo);

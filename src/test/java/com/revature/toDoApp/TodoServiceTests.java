@@ -168,13 +168,12 @@ class TodoServiceTest {
         when(todoRepository.save(any(Todo.class))).thenReturn(todoUpdate);
 
         // Act
-        Todo result = todoService.updateTodo(todoUpdate);
+        Todo updatedTodo = todoService.updateTodo(todoUpdate);
 
         // Assertions: Check Each Field of result.  Check if result is empty.
-        assertNotNull(result);
-        assertEquals("Updated Text", result.getText());
-        assertTrue(result.isCompleted());
-        assertEquals("updatedAccount", result.getAccount_name());
+        assertEquals(todoUpdate.getText(), updatedTodo.getText());
+        assertEquals(todoUpdate.isCompleted(), updatedTodo.isCompleted());
+        assertEquals(todoUpdate.getAccount_name(), updatedTodo.getAccount_name());
         verify(todoRepository).save(existingTodo);
 
     }

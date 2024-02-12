@@ -23,17 +23,17 @@ public class Account {
     public Account(){
 
     }
-    public Account(String name, String password, boolean isAdmin){
+    public Account(String name, String password, boolean is_admin){
         this.name = name;
         this.password = password;
-        this.is_admin = isAdmin;
+        this.is_admin = is_admin;
     }
 
-    public Account(int accountId, String name, String password, boolean isAdmin){
+    public Account(int accountId, String name, String password, boolean is_admin){
         this.account_id =  accountId;
         this.name = name;
         this.password = password;
-        this.is_admin = isAdmin;
+        this.is_admin = is_admin;
     }
 
 

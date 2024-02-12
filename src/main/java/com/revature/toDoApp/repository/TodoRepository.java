@@ -18,4 +18,8 @@ public interface TodoRepository extends JpaRepository<Todo, Integer> {
     Optional<List<Todo>> findByAccountName(@Param("account_name") String accountName);
 
 
+    @Query("FROM Todo t WHERE t.completed = :completed")
+    Optional<List<Todo>> findByCompleted(@Param("completed") boolean completed);
+
+
 }

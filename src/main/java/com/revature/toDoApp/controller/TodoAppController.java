@@ -1,7 +1,5 @@
 package com.revature.toDoApp.controller;
 import com.revature.toDoApp.exception.AccountNotFoundException;
-import com.revature.toDoApp.exception.InvalidAccountException;
-import com.revature.toDoApp.exception.InvalidTodoException;
 import com.revature.toDoApp.exception.TodoNotFoundException;
 import com.revature.toDoApp.model.Account;
 import com.revature.toDoApp.model.Todo;
@@ -13,17 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RestController
 public class TodoAppController {
 
 
-    // TODO Dependency Injection
+
 
     @Autowired
     private TodoService todoService;
@@ -37,8 +30,6 @@ public class TodoAppController {
         this.accountService = accountService;
 
     }
-
-    private static final Logger logger = LoggerFactory.getLogger(TodoAppController.class);
 
     // TODO Handler for creating new todo
     @PostMapping(value = "/todo")
@@ -60,6 +51,14 @@ public class TodoAppController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
+    @GetMapping(value= "/todo/completed/{completed}")
+    public ResponseEntity<List<Todo>> getAllTodosByCompleted(@PathVariable("completed") boolean completed){
+        List<Todo> response = todoService.getAllTodosByCompleted(completed);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
     @PatchMapping(value = "/todo/{todo_id}")
     public ResponseEntity<Todo> updateTodo(@PathVariable("todo_id") int todo_id, @RequestBody Todo todo) {
         todo.setTodo_id(todo_id);
@@ -69,7 +68,7 @@ public class TodoAppController {
 
 
 
-    @GetMapping(value = "/account/{account_name}/todo")
+    @GetMapping(value = "/todo/account/{account_name}")
     public ResponseEntity<?> getAllTodosByAccount(@PathVariable String account_name) {
         List<Todo> response = todoService.getAllTodosByAccount(account_name);
         return new ResponseEntity<>(response, HttpStatus.OK);
