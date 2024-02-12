@@ -43,6 +43,16 @@ Delete a Todo
     URL Parameters: todo_id (required) - The ID of the todo to delete.
     Response: Returns a success message with a 200 OK status if deletion is successful.
 
+Get Todos Based on Completion
+
+    URL: /todo/completed/{completed}
+    Method: GET
+    Description: Retrieves todo items based on completion status.
+    URL Parameters: completed (required) - The boolean value to filter for completion.
+    Response: Returns a list of Todo objects with a status of 200 OK.
+
+
+
 Account Management
 Create a New Account
 
@@ -75,7 +85,7 @@ Delete an Account
     URL Parameters: account_id (required) - The ID of the account to delete.
     Response: Returns a success message with a 200 OK status if deletion is successful.
 
-Exception Handling
+Custom Exception Handling
 
     AccountNotFoundException: Thrown when an operation is attempted on a non-existing account.
     TodoNotFoundException: Thrown when an operation is attempted on a non-existing todo item.
