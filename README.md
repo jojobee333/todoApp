@@ -98,6 +98,7 @@ Data Validation Handling
 Account
 * Account Name and Password fields are required.
 * Account Passwords must be longer than 5 characters.
+
 Todo
 * Todo Text is required and must not exceed 100 characters.
 * A Valid Account is required to create a Todo. 
