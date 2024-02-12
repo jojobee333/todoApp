@@ -26,6 +26,14 @@ Get All Todos
     Description: Retrieves all todo items.
     Response: Returns a list of Todo objects with a 200 OK status.
 
+Get All Todos by Account
+
+    URL: /todo/{account_name}
+    Method: GET
+    Description: Retrieves all todos associated with a specific account.
+    URL Parameters: account_name (required) - The name of the account.
+    Response: Returns a list of Todo objects with a 200 OK status.
+
 Update a Todo
 
     URL: /todo/{todo_id}
@@ -69,13 +77,6 @@ Get All Accounts
     Description: Retrieves all accounts.
     Response: Returns a list of Account objects with a 200 OK status.
 
-Get All Todos by Account
-
-    URL: /account/{account_name}/todo
-    Method: GET
-    Description: Retrieves all todos associated with a specific account.
-    URL Parameters: account_name (required) - The name of the account.
-    Response: Returns a list of Todo objects with a 200 OK status.
 
 Delete an Account
 
