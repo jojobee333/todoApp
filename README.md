@@ -93,7 +93,7 @@ Custom Exception Handling
 
 Data Validation Handling
 
-    The data validation enforces certain rules when sending requests and creating new Todo's and Accounts.
+The data validation enforces certain rules when sending requests and creating new Todo's and Accounts.
 
 Account
 * Account Name and Password fields are required.
@@ -105,5 +105,5 @@ Todo
 
 Notes
 
-    All endpoints return appropriate HTTP status codes indicating the success or failure of the request.
-    The application uses JSON format for request and response bodies.
+All endpoints return appropriate HTTP status codes indicating the success or failure of the request.
+The application uses JSON format for request and response bodies.
