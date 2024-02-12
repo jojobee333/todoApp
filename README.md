@@ -90,6 +90,17 @@ Custom Exception Handling
     AccountNotFoundException: Thrown when an operation is attempted on a non-existing account.
     TodoNotFoundException: Thrown when an operation is attempted on a non-existing todo item.
 
+Data Validation Handling
+
+    The data validation enforces certain rules when sending requests and creating new Todo's and Accounts.
+
+Account
+* Account Name and Password fields are required.
+* Account Passwords must be longer than 5 characters.
+Todo
+* Todo Text is required and must not exceed 100 characters.
+* A Valid Account is required to create a Todo. 
+
 Notes
 
     All endpoints return appropriate HTTP status codes indicating the success or failure of the request.
