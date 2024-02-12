@@ -28,7 +28,7 @@ Get All Todos
 
 Get All Todos by Account
 
-    URL: /todo/{account_name}
+    URL: /todo/account/{account_name}
     Method: GET
     Description: Retrieves all todos associated with a specific account.
     URL Parameters: account_name (required) - The name of the account.
