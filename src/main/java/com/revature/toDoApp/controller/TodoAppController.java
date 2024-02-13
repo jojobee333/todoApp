@@ -1,4 +1,6 @@
 package com.revature.toDoApp.controller;
+import com.revature.toDoApp.dto.AccountDTO;
+import com.revature.toDoApp.dto.TodoDTO;
 import com.revature.toDoApp.exception.AccountNotFoundException;
 import com.revature.toDoApp.exception.TodoNotFoundException;
 import com.revature.toDoApp.model.Account;
@@ -33,68 +35,68 @@ public class TodoAppController {
 
     // TODO Handler for creating new todo
     @PostMapping(value = "/todo")
-    public ResponseEntity<Todo> registerTodo(@RequestBody Todo todo) {
-        Todo response = todoService.createTodo(todo);
+    public ResponseEntity<TodoDTO> registerTodo(@RequestBody TodoDTO todoDto) {
+        Todo todo = todoService.convertToEntity(todoDto);
+        TodoDTO response = todoService.createTodo(todo);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+
+    @PostMapping(value = "/account")
+    public ResponseEntity<AccountDTO> registerAccount(@RequestBody AccountDTO accountDto) {
+        Account account = accountService.convertToEntity(accountDto);
+        AccountDTO response = accountService.createAccount(account);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 
     @GetMapping(value = "/todo/{todo_id}")
-    public ResponseEntity<Todo> getTodo(@PathVariable Integer todo_id) {
-        Todo response = todoService.getTodoById(todo_id);
+    public ResponseEntity<TodoDTO> getTodo(@PathVariable Integer todo_id) {
+        TodoDTO response = todoService.getTodoById(todo_id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(value = "/todo")
     public ResponseEntity<?> getAllTodos() {
-        List<Todo> response = todoService.getAllTodos();
+        List<TodoDTO> response = todoService.getAllTodos();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     @GetMapping(value= "/todo/completed/{completed}")
-    public ResponseEntity<List<Todo>> getAllTodosByCompleted(@PathVariable("completed") boolean completed){
-        List<Todo> response = todoService.getAllTodosByCompleted(completed);
+    public ResponseEntity<List<TodoDTO>> getAllTodosByCompleted(@PathVariable("completed") boolean completed){
+        List<TodoDTO> response = todoService.getAllTodosByCompleted(completed);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     @PatchMapping(value = "/todo/{todo_id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable("todo_id") int todo_id, @RequestBody Todo todo) {
+    public ResponseEntity<TodoDTO> updateTodo(@PathVariable("todo_id") int todo_id, @RequestBody Todo todo) {
         todo.setTodo_id(todo_id);
-        Todo response = todoService.updateTodo(todo);
+        TodoDTO response = todoService.updateTodo(todo);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
 
-    @GetMapping(value = "/todo/account/{account_name}")
-    public ResponseEntity<?> getAllTodosByAccount(@PathVariable String account_name) {
-        List<Todo> response = todoService.getAllTodosByAccount(account_name);
+    @GetMapping(value = "/todo/account/{account_id}")
+    public ResponseEntity<?> getAllTodosByAccount(@PathVariable Integer account_id) {
+        List<TodoDTO> response = todoService.getAllTodosByAccount(account_id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/account")
-    public ResponseEntity<?> getAllAccounts() {
-        List<Account> response = accountService.getAllAccounts();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-
-
-    @PostMapping(value = "/account")
-    public ResponseEntity<Account> registerAccount(@RequestBody Account account) {
-        Account response = accountService.createAccount(account);
+    public ResponseEntity<List<AccountDTO>> getAllAccounts() {
+        List<AccountDTO> response = accountService.getAllAccounts();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
 
     @DeleteMapping(value="/account/{account_id}")
     public ResponseEntity<?> deleteAccount(@PathVariable Integer account_id) {
         boolean isDeleted = accountService.deleteAccount(account_id);
         if (!isDeleted) {
-            throw new AccountNotFoundException("Account with name: " + account_id + " was not found. Deletion Not Completed.");
+            throw new AccountNotFoundException("Account with ID: " + account_id + " was not found. Deletion Not Completed.");
         }
         return new ResponseEntity<>("{\"message\":\"Account Successfully Deleted\"}", HttpStatus.OK);
     }

@@ -1,60 +1,79 @@
 package com.revature.toDoApp.model;
 import jakarta.persistence.*;
-import java.util.Objects;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="Account")
 public class Account {
+    @Override
+    public String toString() {
+        return "Account{" +
+                "account_id=" + accountId +
+                ", account_name='" + accountName + '\'' +
+                ", password='" + password + '\'' +
+                ", todoList=" + todoList +
+                '}';
+    }
 
-    @Column(name="account_id")
-    private @Id @GeneratedValue(strategy= GenerationType.AUTO) int account_id;
-
-    @Column(name="name")
-    private String name;
-
-
-    @Column(name="password")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int accountId;
+    @Column(unique = true)
+    private String accountName;
     private String password;
+    @OneToMany(targetEntity = Todo.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Todo> todoList = new ArrayList<>();
 
 
-    @Column(name="is_admin")
-    private boolean is_admin;
 
     public Account(){
 
     }
-    public Account(String name, String password, boolean is_admin){
-        this.name = name;
+
+
+    public Account(String accountName, String password){
+        this.accountName = accountName;
         this.password = password;
-        this.is_admin = is_admin;
+
     }
 
-    public Account(int accountId, String name, String password, boolean is_admin){
-        this.account_id =  accountId;
-        this.name = name;
+    public Account(int accountId, String accountName, String password){
+        this.accountId =  accountId;
+        this.accountName = accountName;
         this.password = password;
-        this.is_admin = is_admin;
+
     }
 
 
+    public  void addTodo(Todo todo){
+        this.todoList.add(todo);
+        todo.setAccount(this);
 
-
-    public int getAccount_id() {
-        return account_id;
     }
 
-    public void setAccount_id(int account_id) {
-        this.account_id = account_id;
+    public void removeTodo(Todo todo){
+        this.todoList.remove(todo);
+        todo.setAccount(null);
     }
 
-    public String getName() {
-        return name;
+
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
 
     public String getPassword() {
         return password;
@@ -64,25 +83,15 @@ public class Account {
         this.password = password;
     }
 
-
-    public boolean isIs_admin() {
-        return is_admin;
+    public List<Todo> getTodoList() {
+        return todoList;
     }
 
-    public void setIs_admin(boolean is_admin) {
-        this.is_admin = is_admin;
+    public void setTodoList(List<Todo> todoList) {
+        this.todoList = todoList;
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Account account)) return false;
-        return account_id == account.account_id && is_admin == account.is_admin && Objects.equals(name, account.name) && Objects.equals(password, account.password);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(account_id, name, password, is_admin);
-    }
+
 }

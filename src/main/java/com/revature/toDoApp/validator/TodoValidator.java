@@ -27,9 +27,6 @@ public class TodoValidator implements Validator {
         if(todo.getText().length() > 100) {
             errors.rejectValue("text", "text.too.long", "Todo Text Exceed Max Length");
         }
-        if(todo.getAccount_name() == null || todo.getAccount_name().isEmpty()) {
-            errors.rejectValue("account_name", "account_name.empty", "Account Name Cannot Be Empty");
-        }
     }
 
 

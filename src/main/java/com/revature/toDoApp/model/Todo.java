@@ -1,58 +1,40 @@
 package com.revature.toDoApp.model;
-import jakarta.persistence.*;
 
-import java.util.Objects;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="Todo")
 public class Todo {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int todo_id;
 
-    @Column(name="todo_id")
-    private @Id @GeneratedValue(strategy= GenerationType.AUTO) int todo_id;
-
-
-    @Column(name="text")
     private String text;
 
-    @Column(name="account_name")
-    private String account_name;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 
-    @Column(name="completed")
-    private Boolean completed;
+    private boolean completed;
 
-    public Todo(){
-
+    public Todo() {
     }
 
-
-    public Todo(String text, Boolean completed, String account_name){
+    public Todo(String text, Boolean completed, Account account) {
         this.text = text;
         this.completed = completed;
-        this.account_name = account_name;
+        this.account = account;
     }
-    public Todo(String text, Boolean completed, int todo_id, String account_name){
-        this.todo_id = todo_id;
-        this.text = text;
-        this.completed = completed;
-        this.account_name = account_name;
-    }
+
+    // Getters and Setters
 
     public int getTodo_id() {
         return todo_id;
-
     }
 
     public void setTodo_id(int todo_id) {
         this.todo_id = todo_id;
-    }
-
-    public String getAccount_name() {
-        return account_name;
-    }
-
-    public void setAccount_name(String account_name) {
-        this.account_name = account_name;
     }
 
     public String getText() {
@@ -63,7 +45,15 @@ public class Todo {
         this.text = text;
     }
 
-    public Boolean isCompleted() {
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Boolean getCompleted() {
         return completed;
     }
 
@@ -71,19 +61,5 @@ public class Todo {
         this.completed = completed;
     }
 
-    public String toString() {
-        return "Todo{" + "id= " + this.todo_id + '\'' + ", text= '" + this.text + '\'' + ", isCompleted= '" + completed + '\'' + "createdBy= '" + account_name + '\'' +  '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Todo todo)) return false;
-        return todo_id == todo.todo_id && completed == todo.completed && Objects.equals(text, todo.text) && Objects.equals(account_name, todo.account_name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(todo_id, text, account_name, completed);
-    }
+    // toString, equals, and hashCode methods
 }
