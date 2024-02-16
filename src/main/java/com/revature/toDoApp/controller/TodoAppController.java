@@ -7,6 +7,8 @@ import com.revature.toDoApp.model.Account;
 import com.revature.toDoApp.model.Todo;
 import com.revature.toDoApp.service.AccountService;
 import com.revature.toDoApp.service.TodoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import java.util.List;
 
 @RestController
 public class TodoAppController {
+
+    private static final Logger logger = LoggerFactory.getLogger(TodoService.class);
 
 
 
@@ -36,6 +40,7 @@ public class TodoAppController {
     // TODO Handler for creating new todo
     @PostMapping(value = "/todo")
     public ResponseEntity<TodoDTO> registerTodo(@RequestBody TodoDTO todoDto) {
+//        logger.info(todoDto.toString());
         Todo todo = todoService.convertToEntity(todoDto);
         TodoDTO response = todoService.createTodo(todo);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -80,8 +85,8 @@ public class TodoAppController {
 
 
     @GetMapping(value = "/todo/account/{account_id}")
-    public ResponseEntity<?> getAllTodosByAccount(@PathVariable Integer account_id) {
-        List<TodoDTO> response = todoService.getAllTodosByAccount(account_id);
+    public ResponseEntity<?> getAllTodosByAccount(@PathVariable String accountName) {
+        List<TodoDTO> response = todoService.getAllTodosByAccount(accountName);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

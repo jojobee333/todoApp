@@ -23,7 +23,7 @@ public class Account {
     @Column(unique = true)
     private String accountName;
     private String password;
-    @OneToMany(targetEntity = Todo.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Todo.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Todo> todoList = new ArrayList<>();
 
 

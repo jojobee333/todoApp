@@ -8,7 +8,10 @@ import com.revature.toDoApp.model.Account;
 import com.revature.toDoApp.model.Todo;
 import com.revature.toDoApp.repository.AccountRepository;
 import com.revature.toDoApp.repository.TodoRepository;
+import com.revature.toDoApp.validator.TodoDTOValidator;
 import com.revature.toDoApp.validator.TodoValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -28,29 +31,34 @@ public class TodoService {
     @Autowired
     private TodoValidator todoValidator;
 
+    @Autowired
+    private TodoDTOValidator todoDTOValidator;
+
+    private static final Logger logger = LoggerFactory.getLogger(TodoService.class);
+
     public TodoDTO convertToDto(Todo todo) {
+        validateTodo(todo);
+        logger.info(todo.toString());
         TodoDTO todoDto = new TodoDTO();
         todoDto.setTodoId(todo.getTodo_id());
         todoDto.setText(todo.getText());
         todoDto.setCompleted(todo.getCompleted());
         if (todo.getAccount() != null) {
-            todoDto.setAccountId(todo.getAccount().getAccountId());
+            todoDto.setAccountName(todo.getAccount().getAccountName());
         }
         // Add other fields as necessary
         return todoDto;
     }
 
-    public Todo convertToEntity(TodoDTO todoDto) {
+    public Todo convertToEntity(TodoDTO todoDto){
+        validateTodoDTO(todoDto);
         Todo todo = new Todo();
-        todo.setTodo_id(todoDto.getTodoId());
-        todo.setText(todoDto.getText());
+        logger.info(todoDto.toString());
         todo.setCompleted(todoDto.getCompleted());
-
-            Account account = accountRepository.findById(todoDto.getAccountId())
-                    .orElseThrow(() -> new AccountNotFoundException("Account Not Found with ID: " + todoDto.getAccountId()));
-            todo.setAccount(account);
-
-        // Add other fields as necessary
+        todo.setText(todoDto.getText());
+        Account account = accountRepository.findByName(todoDto.getAccountName())
+                .orElseThrow(() -> new AccountNotFoundException("Account Not Found"));
+        todo.setAccount(account);
         return todo;
     }
 
@@ -62,14 +70,24 @@ public class TodoService {
         }
     }
 
+    private void validateTodoDTO(TodoDTO todo) {
+        Errors errors = new BeanPropertyBindingResult(todo, "todoDTO");
+        todoDTOValidator.validate(todo, errors);
+        if (errors.hasErrors()) {
+            throw new InvalidTodoException("Todo Data Class Object is Invalid.", errors);
+        }
+    }
     public TodoDTO createTodo(Todo todo) {
         validateTodo(todo);
         Todo savedTodo = todoRepository.save(todo);
+        Account account = todo.getAccount();
+        account.addTodo(savedTodo);
+        accountRepository.save(account);
         return convertToDto(savedTodo);
     }
 
-    public List<TodoDTO> getAllTodosByAccount(int account_id) {
-        return todoRepository.findByAccountId(account_id).stream()
+    public List<TodoDTO> getAllTodosByAccount(String accountName) {
+        return todoRepository.findByAccountName(accountName).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }

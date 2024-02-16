@@ -3,14 +3,14 @@ package com.revature.toDoApp.dto;
 public class TodoDTO {
     private int todoId;
     private String text;
-    private int accountId;
+    private String accountName;
     private boolean completed;
 
 
-    public TodoDTO(String text, Boolean completed, int accountId) {
+    public TodoDTO(String text, boolean completed, String accountName) {
         this.text = text;
         this.completed = completed;
-        this.accountId = accountId;
+        this.accountName = accountName;
     }
 
     public TodoDTO() {
@@ -34,12 +34,12 @@ public class TodoDTO {
         this.text = text;
     }
 
-    public int getAccountId() {
-        return accountId;
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
     public Boolean getCompleted() {
@@ -51,6 +51,13 @@ public class TodoDTO {
     }
 
 
-
-
+    @Override
+    public String toString() {
+        return "TodoDTO{" +
+                "todoId=" + todoId +
+                ", text='" + text + '\'' +
+                ", accountName='" + accountName + '\'' +
+                ", completed=" + completed +
+                '}';
+    }
 }

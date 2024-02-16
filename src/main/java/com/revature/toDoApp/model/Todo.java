@@ -12,7 +12,7 @@ public class Todo {
 
     private String text;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 

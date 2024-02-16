@@ -5,6 +5,7 @@ import com.revature.toDoApp.dto.TodoDTO;
 import com.revature.toDoApp.exception.InvalidAccountException;
 import com.revature.toDoApp.exception.AccountNotFoundException;
 import com.revature.toDoApp.model.Account;
+import com.revature.toDoApp.model.Todo;
 import com.revature.toDoApp.repository.AccountRepository;
 import com.revature.toDoApp.validator.AccountValidator;
 import org.slf4j.Logger;
@@ -45,11 +46,23 @@ public class AccountService {
         AccountDTO accountDto = new AccountDTO();
         accountDto.setAccountId(account.getAccountId());
         accountDto.setAccountName(account.getAccountName());
-        // Convert Todo list to TodoDTO list
-        // This is a patched implementation.  A workaround to be revised.
-        List<TodoDTO> todoDtoList = new ArrayList<>(todoService.getAllTodosByAccount(account.getAccountId()));
+        accountDto.setPassword("********");
+        List<TodoDTO> todoDtoList = new ArrayList<>();
+        for(Todo todo: account.getTodoList()){
+            TodoDTO newtodoDto = new TodoDTO(
+                    todo.getText(), todo.getCompleted(), todo.getAccount().getAccountName());
+            todoDtoList.add(newtodoDto);
+        }
+        logger.info(account.getTodoList().toString());
         accountDto.setTodoList(todoDtoList);
         return accountDto;
+    }
+    private void validateAccountDTO(AccountDTO account) {
+        Errors errors = new BeanPropertyBindingResult(account, "accountDTO");
+        accountValidator.validate(account, errors);
+        if (errors.hasErrors()) {
+            throw new InvalidAccountException("Account Data Class Object is Invalid.", errors);
+        }
     }
 
 

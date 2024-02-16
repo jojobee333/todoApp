@@ -58,7 +58,7 @@ public class TodoServiceTest {
         todoDTO.setTodoId(2);
         todoDTO.setText("Test Todo");
         todoDTO.setCompleted(false);
-        todoDTO.setAccountId(1);
+        todoDTO.setAccountName("Test");
     }
 
     @Test
@@ -85,9 +85,9 @@ public class TodoServiceTest {
 
     @Test
     void getAllTodosByAccount_Success() {
-        when(todoRepository.findByAccountId(account.getAccountId())).thenReturn(Arrays.asList(todo));
+        when(todoRepository.findByAccountName(account.getAccountName())).thenReturn(Arrays.asList(todo));
 
-        List<TodoDTO> results = todoService.getAllTodosByAccount(account.getAccountId());
+        List<TodoDTO> results = todoService.getAllTodosByAccount(account.getAccountName());
 
         assertFalse(results.isEmpty());
         assertEquals(1, results.size());

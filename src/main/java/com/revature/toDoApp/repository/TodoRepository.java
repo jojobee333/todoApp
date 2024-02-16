@@ -13,8 +13,8 @@ public interface TodoRepository extends JpaRepository<Todo, Integer> {
     @Query("FROM Todo t WHERE t.text = :text")
     Optional<Todo> findByText(@Param("text") String text);
 
-    @Query("FROM Todo t WHERE t.account.accountId = :accountId")
-    List<Todo> findByAccountId(@Param("accountId") Integer accountId);
+    @Query("FROM Todo t WHERE t.account.accountName = :accountName")
+    List<Todo> findByAccountName(@Param("accountName") String accountName);
 
     @Query("FROM Todo t WHERE t.completed = :completed")
     List<Todo> findByCompleted(@Param("completed") boolean completed);
