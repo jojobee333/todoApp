@@ -2,6 +2,8 @@ package com.revature.toDoApp.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name="Todo")
 public class Todo {
@@ -61,5 +63,25 @@ public class Todo {
         this.completed = completed;
     }
 
-    // toString, equals, and hashCode methods
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Todo todo)) return false;
+        return todo_id == todo.todo_id && completed == todo.completed && Objects.equals(text, todo.text) && Objects.equals(account, todo.account);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(todo_id, text, account, completed);
+    }
+
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "todo_id=" + todo_id +
+                ", text='" + text + '\'' +
+                ", account=" + account +
+                ", completed=" + completed +
+                '}';
+    }
 }
